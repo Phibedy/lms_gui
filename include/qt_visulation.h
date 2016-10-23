@@ -15,8 +15,6 @@ class QtVisulation{
     int my_cycleCounter;
     //Gui
     MainWindow* mainWindow;
-    QtCharts::QSplineSeries *angleSeries;
-    QtCharts::QChart *angleChart;
 public:
     bool initialize();
     bool deinitialize();

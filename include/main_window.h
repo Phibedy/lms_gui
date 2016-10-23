@@ -20,16 +20,6 @@ public:
 
 
 private:
-    void createClientList();
-    void createConsole();
-    void createProfilingOverview();
-    void createRuntimeList();
-
-    //overview boxes
-    QGroupBox *clientListBox;
-    QGroupBox *consoleBox;
-    QGroupBox *profilingBox;
-    QGroupBox *runtimeListBox;
 
     //profiling boxes
     QGroupBox* profilePage;

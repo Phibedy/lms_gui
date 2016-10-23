@@ -2,11 +2,17 @@ set(SOURCES
     "src/qt_visulation.cpp"
     "src/main_window.cpp"
     "src/main.cpp"
+    "src/overview.cpp"
+    "src/logging.cpp"
+    "src/profiling.cpp"
 )
 
 set(HEADERS
     "include/qt_visulation.h"
     "include/main_window.h"
+    "include/overview.h"
+    "include/logging.h"
+    "include/profiling.h"
 )
 
 #set compiler flags
