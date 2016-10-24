@@ -4,13 +4,14 @@
 #include "overview.h"
 #include "profiling.h"
 #include "logging.h"
+#include "graph.h"
 #include <iostream>
 #include <functional>
 #include <string>
 
 MainWindow::MainWindow(){
     //create gui
-    QTabWidget* qtab = new QTabWidget(this);
+    qtab = new QTabWidget(this);
     setCentralWidget(qtab);
     //Add pages
     QWidget *overview = new Overview();
@@ -19,7 +20,8 @@ MainWindow::MainWindow(){
     qtab->addTab(profiling,"Profiling");
     QWidget *logging = new Logging();
     qtab->addTab(logging,"Logging");
-
+    QWidget *graph = new Graph();
+    qtab->addTab(graph,"Graph");
     setWindowTitle(tr("LMS GUI"));
 }
 
@@ -27,4 +29,12 @@ void MainWindow::createProfilingPage(){
     profilePage = new QGroupBox(tr("Profiling"));
     QGridLayout *layout = new QGridLayout;
     profilePage->setLayout(layout);
+}
+
+void MainWindow::updateGui(){
+    bool attachedToRuntime = false;
+    for(int i = 1; i < (int) qtab->children().size(); i++){
+        qtab->setTabEnabled(i,attachedToRuntime);
+    }
+
 }

@@ -13,5 +13,6 @@ bool QtVisulation::deinitialize() {
 
 bool QtVisulation::cycle() {
     my_cycleCounter++;
+    mainWindow->updateGui();
     return true;
 }

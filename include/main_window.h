@@ -15,8 +15,10 @@
 
 class MainWindow : public QMainWindow{
     Q_OBJECT
+    QTabWidget* qtab;
 public:
     MainWindow();
+    void updateGui();
 
 
 private:

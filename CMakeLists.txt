@@ -5,6 +5,7 @@ set(SOURCES
     "src/overview.cpp"
     "src/logging.cpp"
     "src/profiling.cpp"
+    "src/graph.cpp"
 )
 
 set(HEADERS
@@ -13,6 +14,7 @@ set(HEADERS
     "include/overview.h"
     "include/logging.h"
     "include/profiling.h"
+    "include/graph.h"
 )
 
 #set compiler flags

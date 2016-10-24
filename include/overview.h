@@ -26,5 +26,7 @@ private:
     QGroupBox *consoleBox;
     QGroupBox *profilingBox;
     QGroupBox *runtimeListBox;
+    QTableWidget* runtimeTable;
+    QTableWidget* clientTable;
 };
 #endif //LMS_GUI_OVERVIEW
