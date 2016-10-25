@@ -32,7 +32,7 @@ void MainWindow::createProfilingPage(){
 }
 
 void MainWindow::updateGui(){
-    bool attachedToRuntime = false;
+    bool attachedToRuntime = true;
     for(int i = 1; i < (int) qtab->children().size(); i++){
         qtab->setTabEnabled(i,attachedToRuntime);
     }
