@@ -1,3 +1,10 @@
+project(LMS_GUI C CXX)
+
+cmake_minimum_required(VERSION 2.8.12)
+
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
+
 set(SOURCES
     "src/qt_visulation.cpp"
     "src/main_window.cpp"
@@ -35,4 +42,4 @@ find_package(Qt5Charts)
 
 include_directories(include)
 add_executable(qt_visulation ${SOURCES} ${HEADERS})
-target_link_libraries(qt_visulation PRIVATE Qt5::Widgets Qt5::Charts Qt5Core)
+target_link_libraries(qt_visulation PRIVATE ${CONAN_LIBS} Qt5::Widgets Qt5::Charts Qt5Core)
