@@ -23,6 +23,9 @@ MainWindow::MainWindow(){
     QWidget *graph = new Graph();
     qtab->addTab(graph,"Graph");
     setWindowTitle(tr("LMS GUI"));
+
+    //resize it
+    resize(QDesktopWidget().availableGeometry(this).size() * 0.7);
 }
 
 void MainWindow::createProfilingPage(){
