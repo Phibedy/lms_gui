@@ -6,6 +6,8 @@
 class Logging:public QWidget{
     Q_OBJECT
 public:
+    QTableWidget *messageTable;
+    QGroupBox *filterBox;
     Logging();
 private:
 };
