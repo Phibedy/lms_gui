@@ -9,6 +9,7 @@ public:
     QTableWidget *messageTable;
     QGroupBox *filterBox;
     Logging();
+    void filter(const QString &s);
 private:
 };
 #endif //LMS_GUI_OVERVIEW

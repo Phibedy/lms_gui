@@ -13,6 +13,7 @@ set(SOURCES
     "src/logging.cpp"
     "src/profiling.cpp"
     "src/graph.cpp"
+    "src/data_collector.cpp"
 )
 
 set(HEADERS
@@ -22,6 +23,7 @@ set(HEADERS
     "include/logging.h"
     "include/profiling.h"
     "include/graph.h"
+    "include/data_collector.h"
 )
 
 #set compiler flags
