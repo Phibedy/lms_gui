@@ -1,9 +1,11 @@
 #ifndef LMS_GUI_DATA_COLLECTOR_H
 #define LMS_GUI_DATA_COLLECTOR_H
 #include <QString>
+#include <lms/client.h>
 class DataCollector{
     DataCollector();
     static DataCollector* m_instance;
+    lms::Client m_client;
 public:
 
     static DataCollector* getInstance(){
@@ -17,15 +19,11 @@ public:
         return false;
     }
 
-    void connectToRuntime(const QString &s){
+    lms::Client connectToMasterServer();
+    void readMessages();
+    void receivedPackage();
 
-    }
-
-    void receivedPackage(){
-
-    }
-
-    void hasGraph(){
+    bool hasGraph(){
         return false;
     }
 
