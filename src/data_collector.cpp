@@ -1,42 +1,77 @@
 #include <data_collector.h>
-#include <messages.pb.h>
+#include <thread>
+#include <main_window.h>
+#include <lms/logging/event.h>
+#include <exception>
 
-
-DataCollector::DataCollector(){
-    m_client = connectToMasterServer();
-}
-
-lms::Client DataCollector::connectToMasterServer(){
-    //TODO check if file is available
-    return lms::Client::fromUnix("/tmp/lms.sock");
+DataCollector::DataCollector(MainWindow *window):m_running(false){
+    //start the read thread
+    mainWindow = window;
 }
 
 void DataCollector::readMessages(){
-    lms::Response res;
-    m_client.sock().readMessage(res);
-    switch (res.content_case()) {
-    case lms::Response::kClientList:
-        res.client_list().clients_size();
-        res.client_list().clients(0);
-        break;
-    case lms::Response::kInfo:
-        res.info().pid();
-        res.info().version();
-        break;
-    case lms::Response::kLogEvent:
+    if(!running()){
+        try{
+            m_client.connectUnix("/tmp/lms.sock");
+        }catch(std::exception e){
+            return;
+        }
+    }
+    m_running = true;
+    m_thread = std::thread([this](){
+        while(m_running){
+            lms::Response res;
+            if(m_client.sock().readMessage(res)){
+                std::lock_guard<std::mutex> myLock(resposeMutex);
+                responseBuffer.push_back(res);
+            }else{
+                m_running = false;
+            }
 
-        break;
-    case lms::Response::kModuleList:
+        }
+    });
+}
 
-        break;
-    case lms::Response::kProcessList:
+void DataCollector::parsePackages(){
+    if(!running()){
+        return;
+    }
+    std::lock_guard<std::mutex> myLock(resposeMutex);
+    for(const lms::Response &res:responseBuffer){
+        switch (res.content_case()) {
+        case lms::Response::kClientList:
+        {
+            mainWindow->overview->removeClients();
+            for(int i = 0; i <  res.client_list().clients_size(); i++){
+                mainWindow->overview->addClient(res.client_list().clients(0).peer(),res.client_list().clients(0).fd());
+            }
+        }
+            break;
+        case lms::Response::kInfo:
+            res.info().pid();
+            res.info().version();
+            break;
+        case lms::Response::kLogEvent:
+        {
+            lms::logging::Level lvl;
+            lms::Time time;
+            //TODO
 
-        break;
-    case lms::Response::kProfilingSummary:
+            mainWindow->overview->logMessage(lvl, res.log_event().tag(),res.log_event().text(),time);
+        }
+            break;
+        case lms::Response::kModuleList:
 
-        break;
-    default:
-        break;
+            break;
+        case lms::Response::kProcessList:
+
+            break;
+        case lms::Response::kProfilingSummary:
+
+            break;
+        default:
+            break;
+        }
     }
 }
 

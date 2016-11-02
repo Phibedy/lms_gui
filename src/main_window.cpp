@@ -14,24 +14,18 @@ MainWindow::MainWindow(){
     qtab = new QTabWidget(this);
     setCentralWidget(qtab);
     //Add pages
-    QWidget *overview = new Overview();
+    overview = new Overview();
     qtab->addTab(overview,"Overview");
-    QWidget *profiling = new Profiling();
+    profiling = new Profiling();
     qtab->addTab(profiling,"Profiling");
-    QWidget *logging = new Logging();
+    logging = new Logging();
     qtab->addTab(logging,"Logging");
-    QWidget *graph = new Graph();
+    graph = new Graph();
     qtab->addTab(graph,"Graph");
     setWindowTitle(tr("LMS GUI"));
 
     //resize it
     resize(QDesktopWidget().availableGeometry(this).size() * 0.7);
-}
-
-void MainWindow::createProfilingPage(){
-    profilePage = new QGroupBox(tr("Profiling"));
-    QGridLayout *layout = new QGridLayout;
-    profilePage->setLayout(layout);
 }
 
 void MainWindow::updateGui(){

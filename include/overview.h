@@ -2,11 +2,17 @@
 #define LMS_GUI_OVERVIEW
 
 #include <QtWidgets>
+#include <lms/logging/event.h>
 
 class Overview:public QWidget{
     Q_OBJECT
 public:
     Overview();
+
+    void removeClients();
+    void addClient(std::string peer, std::int32_t fd);
+    void logMessage(lms::logging::Level lvl, std::string tag, std::string text,lms::Time stamp);
+
     /*
     void addClient();
     void removeClient();

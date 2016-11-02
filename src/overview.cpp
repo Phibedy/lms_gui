@@ -104,3 +104,16 @@ void Overview::createProfilingOverview(){
     QGridLayout *layout = new QGridLayout;
     profilingBox->setLayout(layout);
 }
+
+void Overview::removeClients(){
+    //TODO
+}
+
+void Overview::addClient(std::string peer, std::int32_t fd){
+    //TODO
+}
+
+void Overview::logMessage(lms::logging::Level lvl, std::string tag, std::string text,lms::Time stamp){
+    //TODO
+}
+

@@ -2,26 +2,29 @@
 #define LMS_GUI_DATA_COLLECTOR_H
 #include <QString>
 #include <lms/client.h>
+#include <messages.pb.h>
+#include <mutex>
+#include <thread>
+
+class MainWindow;
+
 class DataCollector{
-    DataCollector();
-    static DataCollector* m_instance;
+    MainWindow* mainWindow;
     lms::Client m_client;
+    std::mutex resposeMutex;
+    std::vector<lms::Response> responseBuffer;
+    std::thread m_thread;
+
+    bool m_running;
 public:
+    DataCollector(MainWindow *window);
 
-    static DataCollector* getInstance(){
-        if(m_instance == nullptr){
-            m_instance = new DataCollector();
-        }
-        return m_instance;
+    bool running(){
+        return m_running;
     }
-
-    bool connected(){
-        return false;
-    }
-
-    lms::Client connectToMasterServer();
     void readMessages();
     void receivedPackage();
+    void parsePackages();
 
     bool hasGraph(){
         return false;

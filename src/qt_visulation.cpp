@@ -2,6 +2,8 @@
 
 bool QtVisulation::initialize() {
     mainWindow = new MainWindow();
+
+    dataCollector = new DataCollector(mainWindow);
     mainWindow->show();
     return true;
 }

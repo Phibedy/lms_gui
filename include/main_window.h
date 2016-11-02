@@ -11,6 +11,10 @@
 #include <QTabWidget>
 #include <QGroupBox>
 #include "iostream"
+#include <overview.h>
+#include <logging.h>
+#include <profiling.h>
+#include <graph.h>
 
 
 class MainWindow : public QMainWindow{
@@ -19,14 +23,11 @@ class MainWindow : public QMainWindow{
 public:
     MainWindow();
     void updateGui();
-
-
-private:
-
-    //profiling boxes
-    QGroupBox* profilePage;
-    void createProfilingPage();
-
+    //lazy
+    Overview *overview;
+    Profiling *profiling;
+    Logging *logging;
+    Graph *graph;
 };
 
 #endif // QT_VISULATION_MAIN_WINDOW_H

@@ -6,6 +6,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMainWindow>
 #include <QtCharts/QSplineSeries>
+#include <data_collector.h>
 
 
 /**
@@ -15,6 +16,7 @@ class QtVisulation{
     int my_cycleCounter;
     //Gui
     MainWindow* mainWindow;
+    DataCollector* dataCollector;
 public:
     bool initialize();
     bool deinitialize();
