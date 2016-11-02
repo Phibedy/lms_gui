@@ -38,13 +38,13 @@ void DataCollector::readMessages(){
                 responseBuffer.push_back(res);
             }else if(resType == lms::ProtobufSocket::ERROR){
                 //std::cout<<"could not read message: "<<"ERROR"<<std::endl;
-                usleep(500000);
+                usleep(5000);
             }else if(resType == lms::ProtobufSocket::CLOSED){
                 //std::cout<<"could not read message: "<<"Connection closed!"<<std::endl;
-                usleep(500000);
+                usleep(5000);
             }else{
                 //std::cout<<"could not read message: "<<"UNKOWN"<<std::endl;
-                usleep(500000);
+                usleep(5000);
             }
         }
     });
@@ -56,16 +56,19 @@ void DataCollector::cycle(){
         return;
     }
     //ask for runtimes every time after time
-
     try{
         lms::Response res;
         res.mutable_process_list();
-        m_client.sock().writeMessage(res);
+        m_client.sock().writeMessage(res); //TODO msg only arrives once
+
+        /*Damit killt man den master server :D
+        m_client.sock().close();
+        m_client.connectUnix("/tmp/lms.sock");
+        */
     }catch(std::exception e){
         std::cout<<"writeMessage failed" <<e.what()<<std::endl;
         return;
     }
-
     parsePackages();
 }
 
