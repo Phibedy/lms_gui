@@ -49,7 +49,7 @@ void DataCollector::readMessages(){
         }
     });
 }
-
+int hackCounter = 10000;
 void DataCollector::cycle(){
     if(!running()){
         readMessages();
@@ -57,14 +57,15 @@ void DataCollector::cycle(){
     }
     //ask for runtimes every time after time
     try{
-        lms::Response res;
-        res.mutable_process_list();
-        m_client.sock().writeMessage(res); //TODO msg only arrives once
-
-        //ohne sleep killt man den master server?
-        //m_client.sock().close();
-        //m_client.connectUnix("/tmp/lms.sock");
-        //usleep(1000000);
+        hackCounter++;
+        if(hackCounter > 10000){
+            lms::Request req;
+            req.mutable_list_processes();
+            m_client.sock().writeMessage(req);
+            req.mutable_list_clients();
+            m_client.sock().writeMessage(req);
+            hackCounter = 0;
+        }
     }catch(std::exception e){
         std::cout<<"writeMessage failed" <<e.what()<<std::endl;
         return;
@@ -76,9 +77,9 @@ void DataCollector::parsePackages(){
     std::lock_guard<std::mutex> myLock(resposeMutex);
     if(responseBuffer.size() == 0)
         return;
-    std::cout<<"parsePackage: msgcount: "<<responseBuffer.size()<<std::endl;
+    //std::cout<<"parsePackage: msgcount: "<<responseBuffer.size()<<std::endl;
     for(const lms::Response &res:responseBuffer){
-        std::cout<<"msg-content: "<<res.content_case()<<std::endl;
+        //std::cout<<"msg-content: "<<res.content_case()<<std::endl;
         switch (res.content_case()) {
         case lms::Response::kClientList:
         {
@@ -89,7 +90,7 @@ void DataCollector::parsePackages(){
         }
             break;
         case lms::Response::kInfo:
-            std::cout<<"Inforpackage: "<<std::to_string(res.info().pid()) << ", version "<<std::to_string(res.info().version());
+            //std::cout<<"Inforpackage: "<<std::to_string(res.info().pid()) << ", version "<<std::to_string(res.info().version());
             break;
         case lms::Response::kLogEvent:
         {
@@ -105,7 +106,7 @@ void DataCollector::parsePackages(){
             break;
         case lms::Response::kProcessList:
         {
-            std::cout<<"got processList"<<std::endl;
+            //std::cout<<"got processList: "<<res.process_list().processes_size()<<std::endl;
             mainWindow->overview->removeProcesses();
             for(int i = 0; i <res.process_list().processes_size(); i++){
                 mainWindow->overview->addProcess(res.process_list().processes(i).pid(),res.process_list().processes(i).config_file());

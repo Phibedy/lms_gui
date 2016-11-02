@@ -42,15 +42,27 @@ void Overview::createRuntimeList(){
     runtimeTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     runtimeTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     runtimeTable->setSelectionMode(QAbstractItemView::SingleSelection);
+
     runtimeTable->verticalHeader()->setVisible(false);
     runtimeTable->setShowGrid(false);
     runtimeTable->setRowCount(0);
     runtimeTable->setColumnCount(2);
+    runtimeTable->horizontalHeader()->setStretchLastSection(true);
     QStringList qlist;
     qlist<<"ID"<<"CONFIG";
     runtimeTable->setHorizontalHeaderLabels(qlist);
     layout->addWidget(runtimeTable);
     runtimeListBox->setLayout(layout);
+    this->connect(runtimeTable, SIGNAL(itemSelectionChanged()), this, SLOT(test()));
+
+}
+
+void Overview::test(){
+    std::cout<<"HALLo"<<std::endl;
+}
+
+void Overview::runtimeSelected(int row, int col){
+    std::cout<<"SELECTED"<<row<<" "<<col<<std::endl;
 }
 
 
@@ -81,7 +93,7 @@ void Overview::createConsole(){
             QScrollBar* sb = consoleOutput->verticalScrollBar();
             sb->setValue(sb->maximum());
     };
-    connect(consoleInput,&QLineEdit::returnPressed,this,consoleInputListener);
+    //TODO does not workconnect(consoleInput,&QLineEdit::returnPressed,this,consoleInputListener);
     consoleInput->setText("your console");
     layout->addWidget(consoleInput);
     consoleBox->setLayout(layout);
@@ -120,19 +132,20 @@ void Overview::logMessage(lms::logging::Level lvl, std::string tag, std::string 
 }
 
 void Overview::removeProcesses(){
+    runtimeTable->clear();
+    runtimeTable->setRowCount(0);
     QStringList qlist;
     qlist<<"ID"<<"CONFIG";
     runtimeTable->setHorizontalHeaderLabels(qlist);
-    runtimeTable->clear();
-    runtimeTable->setRowCount(0);
 }
 
 void Overview::addProcess(std::int32_t pid,std::string configfile){
     QStringList qlist;
     qlist<<"ID"<<"CONFIG";
     runtimeTable->setHorizontalHeaderLabels(qlist);
-    runtimeTable->setRowCount(runtimeTable->rowCount());
+    runtimeTable->setRowCount(runtimeTable->rowCount()+1);
     runtimeTable->setItem(runtimeTable->rowCount()-1, 0, new QTableWidgetItem(QString::fromStdString(std::to_string(pid))));
     runtimeTable->setItem(runtimeTable->rowCount()-1, 1, new QTableWidgetItem(QString::fromStdString(configfile)));
+    //TODO does not workconnect(runtimeTable, SIGNAL(itemSelectionChanged()), this, SLOT(test()));
 }
 
