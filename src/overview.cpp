@@ -25,14 +25,11 @@ void Overview::createClientList(){
     clientTable->setSelectionMode(QAbstractItemView::SingleSelection);
     clientTable->verticalHeader()->setVisible(false);
     clientTable->setShowGrid(false);
-    clientTable->setRowCount(1);
+    clientTable->setRowCount(0);
     clientTable->setColumnCount(2);
     QStringList qlist;
     qlist<<"FD"<<"PEER";
     clientTable->setHorizontalHeaderLabels(qlist);
-
-    clientTable->setItem(0, 0, new QTableWidgetItem("4"));
-    clientTable->setItem(0, 1, new QTableWidgetItem("unix"));
     layout->addWidget(clientTable);
     clientListBox->setLayout(layout);
 }
@@ -47,14 +44,11 @@ void Overview::createRuntimeList(){
     runtimeTable->setSelectionMode(QAbstractItemView::SingleSelection);
     runtimeTable->verticalHeader()->setVisible(false);
     runtimeTable->setShowGrid(false);
-    runtimeTable->setRowCount(1);
+    runtimeTable->setRowCount(0);
     runtimeTable->setColumnCount(2);
     QStringList qlist;
     qlist<<"ID"<<"CONFIG";
     runtimeTable->setHorizontalHeaderLabels(qlist);
-
-    runtimeTable->setItem(0, 0, new QTableWidgetItem("1"));
-    runtimeTable->setItem(0, 1, new QTableWidgetItem("/dev/null - sorry"));
     layout->addWidget(runtimeTable);
     runtimeListBox->setLayout(layout);
 }
@@ -106,14 +100,40 @@ void Overview::createProfilingOverview(){
 }
 
 void Overview::removeClients(){
-    //TODO
+    clientTable->setRowCount(clientTable->rowCount()+1);
+    QStringList qlist;
+    qlist<<"FD"<<"PEER";
+    clientTable->clear();
+    clientTable->setRowCount(0);
 }
 
 void Overview::addClient(std::string peer, std::int32_t fd){
-    //TODO
+    clientTable->setRowCount(clientTable->rowCount()+1);
+    QStringList qlist;
+    qlist<<"FD"<<"PEER";
+    clientTable->setHorizontalHeaderLabels(qlist);
+    clientTable->setItem(clientTable->rowCount()-1, 0, new QTableWidgetItem(QString::fromStdString(std::to_string(fd))));
+    clientTable->setItem(clientTable->rowCount()-1, 1, new QTableWidgetItem(QString::fromStdString(peer)));
 }
 
 void Overview::logMessage(lms::logging::Level lvl, std::string tag, std::string text,lms::Time stamp){
     //TODO
+}
+
+void Overview::removeProcesses(){
+    QStringList qlist;
+    qlist<<"ID"<<"CONFIG";
+    runtimeTable->setHorizontalHeaderLabels(qlist);
+    runtimeTable->clear();
+    runtimeTable->setRowCount(0);
+}
+
+void Overview::addProcess(std::int32_t pid,std::string configfile){
+    QStringList qlist;
+    qlist<<"ID"<<"CONFIG";
+    runtimeTable->setHorizontalHeaderLabels(qlist);
+    runtimeTable->setRowCount(runtimeTable->rowCount());
+    runtimeTable->setItem(runtimeTable->rowCount()-1, 0, new QTableWidgetItem(QString::fromStdString(std::to_string(pid))));
+    runtimeTable->setItem(runtimeTable->rowCount()-1, 1, new QTableWidgetItem(QString::fromStdString(configfile)));
 }
 

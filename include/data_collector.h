@@ -16,16 +16,17 @@ class DataCollector{
     std::thread m_thread;
 
     bool m_running;
+    void readMessages();
+    void parsePackages();
+
 public:
     DataCollector(MainWindow *window);
+
+    void cycle();
 
     bool running(){
         return m_running;
     }
-    void readMessages();
-    void receivedPackage();
-    void parsePackages();
-
     bool hasGraph(){
         return false;
     }

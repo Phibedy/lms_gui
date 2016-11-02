@@ -12,7 +12,8 @@ public:
     void removeClients();
     void addClient(std::string peer, std::int32_t fd);
     void logMessage(lms::logging::Level lvl, std::string tag, std::string text,lms::Time stamp);
-
+    void removeProcesses();
+    void addProcess(std::int32_t pid,std::string configfile);
     /*
     void addClient();
     void removeClient();
