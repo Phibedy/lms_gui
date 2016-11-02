@@ -35,5 +35,6 @@ private:
     QGroupBox *runtimeListBox;
     QTableWidget* runtimeTable;
     QTableWidget* clientTable;
+    QTextEdit* consoleOutput;
 };
 #endif //LMS_GUI_OVERVIEW

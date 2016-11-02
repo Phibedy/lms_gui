@@ -18,7 +18,7 @@ void DataCollector::readMessages(){
             std::cout<<"opened"<<std::endl;
         }catch(std::exception e){
             std::cout<<"could not open it: "<<e.what()<<std::endl;
-            usleep(1000000);
+            usleep(1000000); //TODO needed to be able to open the file if the master server is started afterwards?
             return;
         }
     }
@@ -37,13 +37,13 @@ void DataCollector::readMessages(){
                 std::lock_guard<std::mutex> myLock(resposeMutex);
                 responseBuffer.push_back(res);
             }else if(resType == lms::ProtobufSocket::ERROR){
-                //std::cout<<"could not read message: "<<"ERROR"<<std::endl;
+                std::cout<<"could not read message: "<<"ERROR"<<std::endl;
                 usleep(5000);
             }else if(resType == lms::ProtobufSocket::CLOSED){
-                //std::cout<<"could not read message: "<<"Connection closed!"<<std::endl;
+                std::cout<<"could not read message: "<<"Connection closed!"<<std::endl;
                 usleep(5000);
             }else{
-                //std::cout<<"could not read message: "<<"UNKOWN"<<std::endl;
+                std::cout<<"could not read message: "<<"UNKOWN"<<std::endl;
                 usleep(5000);
             }
         }
@@ -61,10 +61,10 @@ void DataCollector::cycle(){
         res.mutable_process_list();
         m_client.sock().writeMessage(res); //TODO msg only arrives once
 
-        /*Damit killt man den master server :D
-        m_client.sock().close();
-        m_client.connectUnix("/tmp/lms.sock");
-        */
+        //ohne sleep killt man den master server?
+        //m_client.sock().close();
+        //m_client.connectUnix("/tmp/lms.sock");
+        //usleep(1000000);
     }catch(std::exception e){
         std::cout<<"writeMessage failed" <<e.what()<<std::endl;
         return;

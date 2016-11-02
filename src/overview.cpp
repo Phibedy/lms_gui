@@ -59,7 +59,7 @@ void Overview::createConsole(){
     consoleBox = new QGroupBox(tr("Console"));
     QGridLayout *layout = new QGridLayout;
 
-    QTextEdit* consoleOutput = new QTextEdit();
+    consoleOutput = new QTextEdit();
     consoleOutput->setReadOnly(true);
     consoleOutput->setLineWrapMode(QTextEdit::NoWrap);
 
@@ -73,16 +73,11 @@ void Overview::createConsole(){
 
     QLineEdit* consoleInput = new QLineEdit();
 
-    std::function<void()> consoleInputListener = [consoleOutput,consoleInput,this] ()->void {
+    std::function<void()> consoleInputListener = [consoleInput,this] ()->void {
 
             std::cout << "command: "<<consoleInput->text().toStdString() <<std::endl;
             consoleOutput->append(consoleInput->text());
             consoleOutput->moveCursor(QTextCursor::End);
-            //consoleOutput->setCurrentFont(font)
-            //logOutput.setTextColor(color)
-
-            //logOutput.insertPlainText(text)
-
             QScrollBar* sb = consoleOutput->verticalScrollBar();
             sb->setValue(sb->maximum());
     };
@@ -117,7 +112,11 @@ void Overview::addClient(std::string peer, std::int32_t fd){
 }
 
 void Overview::logMessage(lms::logging::Level lvl, std::string tag, std::string text,lms::Time stamp){
-    //TODO
+    //TODO http://stackoverflow.com/questions/2857864/qtextedit-with-different-text-colors-qt-c
+    consoleOutput->append(QString::fromStdString(tag+": " + text));
+    consoleOutput->moveCursor(QTextCursor::End);
+    QScrollBar* sb = consoleOutput->verticalScrollBar();
+    sb->setValue(sb->maximum());
 }
 
 void Overview::removeProcesses(){
