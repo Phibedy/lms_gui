@@ -8,13 +8,13 @@
 #include <iostream>
 #include <functional>
 #include <string>
-
-MainWindow::MainWindow(){
+#include <data_collector.h>
+MainWindow::MainWindow(DataCollector *data){
     //create gui
     qtab = new QTabWidget(this);
     setCentralWidget(qtab);
     //Add pages
-    overview = new Overview();
+    overview = new Overview(data);
     qtab->addTab(overview,"Overview");
     profiling = new Profiling();
     qtab->addTab(profiling,"Profiling");

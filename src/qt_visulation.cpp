@@ -1,9 +1,9 @@
 #include "qt_visulation.h"
 
 bool QtVisulation::initialize() {
-    mainWindow = new MainWindow();
-
-    dataCollector = new DataCollector(mainWindow);
+    dataCollector = new DataCollector();
+    mainWindow = new MainWindow(dataCollector);
+    dataCollector->setMainWindow(mainWindow);
     mainWindow->show();
     return true;
 }
@@ -15,6 +15,9 @@ bool QtVisulation::deinitialize() {
 
 bool QtVisulation::cycle() {
     my_cycleCounter++;
+    if(!dataCollector->connected()){
+        dataCollector->connectToMaster();
+    }
     dataCollector->cycle();
     mainWindow->updateGui();
     return true;

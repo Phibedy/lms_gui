@@ -8,6 +8,8 @@
 
 class MainWindow;
 
+
+
 class DataCollector{
     MainWindow* mainWindow;
     lms::Client m_client;
@@ -15,17 +17,23 @@ class DataCollector{
     std::vector<lms::Response> responseBuffer;
     std::thread m_thread;
 
-    bool m_running;
-    void readMessages();
+    bool m_connected;
+    bool m_broadcast;
     void parsePackages();
 
 public:
-    DataCollector(MainWindow *window);
+    DataCollector();
+
+    void setMainWindow(MainWindow *window){
+        this->mainWindow = window;
+    }
 
     void cycle();
+    void connectToMaster();
+    void attachRuntime(std::string pid);
 
-    bool running(){
-        return m_running;
+    bool connected(){
+        return m_connected;
     }
     bool hasGraph(){
         return false;

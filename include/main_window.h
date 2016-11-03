@@ -16,12 +16,12 @@
 #include <profiling.h>
 #include <graph.h>
 
-
+class DataCollector;
 class MainWindow : public QMainWindow{
     Q_OBJECT
     QTabWidget* qtab;
 public:
-    MainWindow();
+    MainWindow(DataCollector *data);
     void updateGui();
     //lazy
     Overview *overview;

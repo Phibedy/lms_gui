@@ -1,7 +1,9 @@
 #include "overview.h"
 #include <iostream>
+#include <data_collector.h>
 
-Overview::Overview(){
+Overview::Overview(DataCollector *data){
+    this->data = data;
     QVBoxLayout *overviewLayout = new QVBoxLayout;
 
     createClientList();
@@ -53,27 +55,23 @@ void Overview::createRuntimeList(){
     runtimeTable->setHorizontalHeaderLabels(qlist);
     layout->addWidget(runtimeTable);
     runtimeListBox->setLayout(layout);
-    this->connect(runtimeTable, SIGNAL(itemSelectionChanged()), this, SLOT(test()));
+
+    auto runtimeSelector = [this] (int row, int column)->void {
+        this->data->attachRuntime(runtimeTable->item(row,0)->text().toStdString());
+    };
+    connect(runtimeTable, &QTableWidget::cellClicked, this, runtimeSelector);
 
 }
-
-void Overview::test(){
-    std::cout<<"HALLo"<<std::endl;
-}
-
-void Overview::runtimeSelected(int row, int col){
-    std::cout<<"SELECTED"<<row<<" "<<col<<std::endl;
-}
-
 
 void Overview::createConsole(){
 
     consoleBox = new QGroupBox(tr("Console"));
     QGridLayout *layout = new QGridLayout;
 
-    consoleOutput = new QTextEdit();
+    consoleOutput = new QPlainTextEdit();
     consoleOutput->setReadOnly(true);
-    consoleOutput->setLineWrapMode(QTextEdit::NoWrap);
+    consoleOutput->setMaximumBlockCount(256);
+//    consoleOutput->setLineWrapMode(QTextEdit::NoWrap);
 
     QFont font = consoleOutput->font();
     font.setFamily("Courier");
@@ -85,15 +83,15 @@ void Overview::createConsole(){
 
     QLineEdit* consoleInput = new QLineEdit();
 
-    std::function<void()> consoleInputListener = [consoleInput,this] ()->void {
+    auto consoleInputListener = [consoleInput,this] ()->void {
 
             std::cout << "command: "<<consoleInput->text().toStdString() <<std::endl;
-            consoleOutput->append(consoleInput->text());
+            consoleOutput->appendPlainText(consoleInput->text());
             consoleOutput->moveCursor(QTextCursor::End);
             QScrollBar* sb = consoleOutput->verticalScrollBar();
             sb->setValue(sb->maximum());
     };
-    //TODO does not workconnect(consoleInput,&QLineEdit::returnPressed,this,consoleInputListener);
+    connect(consoleInput,&QLineEdit::returnPressed,this,consoleInputListener);
     consoleInput->setText("your console");
     layout->addWidget(consoleInput);
     consoleBox->setLayout(layout);
@@ -124,8 +122,10 @@ void Overview::addClient(std::string peer, std::int32_t fd){
 }
 
 void Overview::logMessage(lms::logging::Level lvl, std::string tag, std::string text,lms::Time stamp){
-    //TODO http://stackoverflow.com/questions/2857864/qtextedit-with-different-text-colors-qt-c
-    consoleOutput->append(QString::fromStdString(tag+": " + text));
+    if(lvl <= lms::logging::Level::INFO){
+        return;
+    }
+    consoleOutput->appendPlainText(QString::fromStdString(tag+": " + text));
     consoleOutput->moveCursor(QTextCursor::End);
     QScrollBar* sb = consoleOutput->verticalScrollBar();
     sb->setValue(sb->maximum());
@@ -140,6 +140,7 @@ void Overview::removeProcesses(){
 }
 
 void Overview::addProcess(std::int32_t pid,std::string configfile){
+    std::cout<<"adding Process"<<pid<<" "<<configfile<<std::endl;
     QStringList qlist;
     qlist<<"ID"<<"CONFIG";
     runtimeTable->setHorizontalHeaderLabels(qlist);

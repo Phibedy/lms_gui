@@ -46,3 +46,18 @@ void Logging::filter(const QString &s){
     //TODO
     std::cout << "filterEdit: "<<s.toStdString() <<std::endl;
 }
+
+void Logging::addMsg(const QString &tag,const QString &text,const lms::logging::Level &lvl, const lms::Time &stamp){
+
+    messageTable->insertRow(0);
+    messageTable->setItem(0,0,new QTableWidgetItem(text));
+    messageTable->setItem(0,1,new QTableWidgetItem(QString::fromStdString(lms::logging::levelName(lvl))));
+    messageTable->setItem(0,2,new QTableWidgetItem(text));
+    while(messageTable->rowCount() > 50)
+        messageTable->removeRow(messageTable->rowCount()-1);
+
+    /*QStringList qlist;
+    qlist<<"Tag"<<"Type"<<"Message";
+    messageTable->setHorizontalHeaderLabels(qlist);*/
+
+}
