@@ -35,9 +35,14 @@ public:
 
     void refresh();
 
-    bool connected(){
+    bool connectedToMaster(){
         return m_connected;
     }
+
+    bool connectedToRuntime(){
+        m_pid.length() != 0;
+    }
+
     bool hasGraph(){
         return false;
     }

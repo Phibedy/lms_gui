@@ -19,6 +19,7 @@ Profiling::Profiling(){
 
 
     //show plot over time
+    /*
 
     timeChart = new QtCharts::QChart();
     QtCharts::QSplineSeries *tmp = new QtCharts::QSplineSeries();
@@ -37,7 +38,7 @@ Profiling::Profiling(){
     chartView->setRenderHint(QPainter::Antialiasing);
     layout->addWidget(chartView);
     //TODO set offset timeChart->axisY()->setMax(13);
-
+    */
     setLayout(layout);
 }
 
@@ -59,5 +60,10 @@ void Profiling::addTrace(QString name, int mean, int stdev, int min, int max){
     QStringList qlist;
     qlist<<"Name"<<"mean in us"<<"std in us"<<"min in us"<<"max in us";
     traceTable->setHorizontalHeaderLabels(qlist);
+    for (int c = 0; c < traceTable->horizontalHeader()->count(); ++c)
+    {
+        traceTable->horizontalHeader()->setSectionResizeMode(
+            0, QHeaderView::Stretch);
+    }
 
 }

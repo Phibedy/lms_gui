@@ -10,6 +10,7 @@
 #include <string>
 #include <data_collector.h>
 MainWindow::MainWindow(DataCollector *data){
+    m_data = data;
     //create gui
     qtab = new QTabWidget(this);
     setCentralWidget(qtab);
@@ -29,7 +30,7 @@ MainWindow::MainWindow(DataCollector *data){
 }
 
 void MainWindow::updateGui(){
-    bool attachedToRuntime = true;
+    bool attachedToRuntime = m_data->connectedToRuntime();
     for(int i = 1; i < (int) qtab->children().size(); i++){
         qtab->setTabEnabled(i,attachedToRuntime);
     }

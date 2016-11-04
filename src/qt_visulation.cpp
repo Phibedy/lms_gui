@@ -15,7 +15,7 @@ bool QtVisulation::deinitialize() {
 
 bool QtVisulation::cycle() {
     my_cycleCounter++;
-    if(!dataCollector->connected()){
+    if(!dataCollector->connectedToMaster()){
         dataCollector->connectToMaster();
     }
     dataCollector->cycle();

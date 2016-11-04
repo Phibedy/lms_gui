@@ -79,11 +79,12 @@ void DataCollector::refresh(){
 }
 
 void DataCollector::cycle(){
-    if(!connected()){
+    if(!connectedToMaster()){
         return;
     }
     //ask for runtimes every time after time
     if(!m_broadcast){
+        std::cout<<"enable m_broadcasting..."<<std::endl;
         try{
             m_broadcast = true;
             lms::Request req;

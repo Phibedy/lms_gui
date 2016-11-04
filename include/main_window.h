@@ -20,6 +20,7 @@ class DataCollector;
 class MainWindow : public QMainWindow{
     Q_OBJECT
     QTabWidget* qtab;
+    DataCollector *m_data;
 public:
     MainWindow(DataCollector *data);
     void updateGui();
