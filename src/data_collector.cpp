@@ -55,13 +55,27 @@ void DataCollector::connectToMaster(){
     });
 }
 void DataCollector::attachRuntime(std::string pid){
+    m_pid = pid; //TODO clear it if we disconnect
     lms::Request req;
     lms::Request_Attach* att = req.mutable_attach();
     att->set_id(pid);
 
     if(m_client.sock().writeMessage(req) != lms::ProtobufSocket::OK){
         m_broadcast = false;
+        m_pid = "";
     }
+}
+void DataCollector::refresh(){
+    if(m_pid.length() == 0)
+        return;
+    //ask for profiling
+    lms::Request req;
+    auto prof = req.mutable_profiling();
+    prof->set_id(m_pid);
+    if(m_client.sock().writeMessage(req) != lms::ProtobufSocket::OK){
+        //TODO error handling
+    }
+
 }
 
 void DataCollector::cycle(){
@@ -95,12 +109,8 @@ void DataCollector::cycle(){
             return;
         }
     }
-
-    //ask for profiling
-    lms::Request req;
-    req.mutable_profiling();
-    m_client.sock().writeMessage(req);
-
+    //TODO
+    refresh();
     parsePackages();
 }
 
@@ -146,7 +156,13 @@ void DataCollector::parsePackages(){
         }
             break;
         case lms::Response::kProfilingSummary:
-
+        {
+            mainWindow->profiling->clearTrace();
+            for(int i = 0; i< res.profiling_summary().traces_size(); i++){
+                const ::lms::Response::ProfilingSummary::Trace& sum = res.profiling_summary().traces(i);
+                mainWindow->profiling->addTrace(QString::fromStdString(sum.name()),sum.avg(),sum.std(),sum.min(),sum.max());
+            }
+        }
             break;
         default:
             break;

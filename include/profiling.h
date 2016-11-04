@@ -10,10 +10,11 @@ class Profiling:public QWidget{
     Q_OBJECT
 public:
     Profiling();
-    QTableWidget *moduleTable;
+    QTableWidget *traceTable;
+    void clearTrace();
+    void addTrace(QString name, int mean, int stdev, int min, int max);
 private:
 
     QtCharts::QChart *timeChart;
-    void setModuleTable(int row,QString name,QString type, int mean, int stdev);
 };
 #endif //LMS_GUI_OVERVIEW

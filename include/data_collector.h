@@ -17,6 +17,7 @@ class DataCollector{
     std::vector<lms::Response> responseBuffer;
     std::thread m_thread;
 
+    std::string m_pid;
     bool m_connected;
     bool m_broadcast;
     void parsePackages();
@@ -31,6 +32,8 @@ public:
     void cycle();
     void connectToMaster();
     void attachRuntime(std::string pid);
+
+    void refresh();
 
     bool connected(){
         return m_connected;

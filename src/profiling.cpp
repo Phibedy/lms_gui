@@ -4,18 +4,18 @@
 Profiling::Profiling(){
     QVBoxLayout *layout = new QVBoxLayout;
     //show list with all modules name,mean,stdev
-    moduleTable = new QTableWidget;
-    moduleTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    moduleTable->setSelectionBehavior(QAbstractItemView::SelectRows);
-    moduleTable->setSelectionMode(QAbstractItemView::SingleSelection);
-    moduleTable->verticalHeader()->setVisible(false);
-    moduleTable->setShowGrid(false);
-    moduleTable->setRowCount(1);
-    moduleTable->setColumnCount(4);
+    traceTable = new QTableWidget;
+    traceTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    traceTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    traceTable->setSelectionMode(QAbstractItemView::SingleSelection);
+    traceTable->verticalHeader()->setVisible(false);
+    traceTable->setShowGrid(false);
+    traceTable->setRowCount(0);
+    traceTable->setColumnCount(5);
     QStringList qlist;
-    qlist<<"Module"<<"type"<<"mean in us"<<"std in us";
-    moduleTable->setHorizontalHeaderLabels(qlist);
-    layout->addWidget(moduleTable);
+    qlist<<"Name"<<"mean in us"<<"std in us"<<"min in us"<<"max in us";
+    traceTable->setHorizontalHeaderLabels(qlist);
+    layout->addWidget(traceTable);
 
 
     //show plot over time
@@ -39,15 +39,25 @@ Profiling::Profiling(){
     //TODO set offset timeChart->axisY()->setMax(13);
 
     setLayout(layout);
-
-    //just for debugging
-    setModuleTable(0,"runtime","main",0,0);
 }
 
-void Profiling::setModuleTable(int row,QString name,QString type, int mean, int stdev){
+void Profiling::clearTrace(){
+    traceTable->clear();
+    traceTable->setRowCount(0);
+    QStringList qlist;
+    qlist<<"Name"<<"mean in us"<<"std in us"<<"min in us"<<"max in us";
+    traceTable->setHorizontalHeaderLabels(qlist);
+}
 
-    moduleTable->setItem(row, 0, new QTableWidgetItem(name));
-    moduleTable->setItem(row, 1, new QTableWidgetItem(type));
-    moduleTable->setItem(row, 2, new QTableWidgetItem(mean));
-    moduleTable->setItem(row, 3, new QTableWidgetItem(stdev));
+void Profiling::addTrace(QString name, int mean, int stdev, int min, int max){
+    traceTable->insertRow(0);
+    traceTable->setItem(0, 0, new QTableWidgetItem(name));
+    traceTable->setItem(0, 1, new QTableWidgetItem(QString::number(mean)));
+    traceTable->setItem(0, 2, new QTableWidgetItem(QString::number(stdev)));
+    traceTable->setItem(0, 3, new QTableWidgetItem(QString::number(min)));
+    traceTable->setItem(0, 4, new QTableWidgetItem(QString::number(max)));
+    QStringList qlist;
+    qlist<<"Name"<<"mean in us"<<"std in us"<<"min in us"<<"max in us";
+    traceTable->setHorizontalHeaderLabels(qlist);
+
 }
